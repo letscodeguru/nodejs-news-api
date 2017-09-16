@@ -5,11 +5,14 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/index');
+var index = require('./routes/news-articles.route');
 var users = require('./routes/users');
 var winston = require('winston');
 var expressWinston = require('express-winston');
-var helmet = require('helmet')
+var helmet = require('helmet');
+var mongoose = require('mongoose');
+
+mongoose.connect('mongodb://45.62.113.8/FeedsData');
 
 var app = express();
 

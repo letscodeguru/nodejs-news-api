@@ -15,7 +15,7 @@
 #    Run image as virtual host (read more: https://github.com/jwilder/nginx-proxy):
 #    docker run -e VIRTUAL_HOST=angular-starter.your-domain.com --name angular-starter angular-starter &
 
-FROM nginx:1.13.0-alpine
+FROM debian:stretch-slim
 
 # install console and node
 RUN apk add --no-cache bash=4.3.46-r5 &&\
@@ -32,10 +32,11 @@ RUN cd /tmp/npm_inst &&\
 # build and publish application
 WORKDIR /tmp/app
 ADD . /tmp/app
-RUN cd /tmp/app &&\
-    npm install -g pm2
-
+RUN mkdir -p /etc/nginx/sites-available &&\
+    mkdir -p /etc/nginx/sites-enabled &&\
+    cp /tmp/app/deploy/nginx.conf /etc/nginx/sites-enabled/default &&\
+    cp /tmp/app/deploy/nginx.conf /etc/nginx/sites-available/default
 # this is for virtual host purposes
+EXPOSE 80
 EXPOSE 3000
-
 ENTRYPOINT ["npm","start"]
